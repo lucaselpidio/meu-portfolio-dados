@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Landing Page</title>
+  <style>
+    /*
+      ==========================================
+      PORTFOLIO LANDING PAGE - ARQUIVO UNICO
+      ==========================================
+
+      Este projeto foi organizado para facilitar futuras alteracoes:
+      - Todo o CSS esta neste arquivo
+      - Todo o JavaScript esta neste arquivo
+      - Os cards sao reutilizaveis: basta copiar um bloco <article class="project-card">
+      - Os textos e links com placeholder estao sinalizados com comentarios
+    */
+
+    :root {
+      --bg-color: #f6f0e8;
+      --surface-color: rgba(255, 255, 255, 0.8);
+      --surface-strong: #ffffff;
+      --text-color: #1f1b16;
+      --muted-color: #62584f;
+      --accent-color: #b85c38;
+      --accent-dark: #8f4324;
+      --border-color: rgba(31, 27, 22, 0.12);
+      --shadow-soft: 0 18px 45px rgba(80, 56, 37, 0.12);
+      --shadow-card: 0 14px 32px rgba(31, 27, 22, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --container-width: 1120px;
+      --transition-fast: 180ms ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-color);
+      background:
+        radial-gradient(circle at top left, rgba(184, 92, 56, 0.18), transparent 32%),
+        radial-gradient(circle at top right, rgba(255, 220, 181, 0.85), transparent 28%),
+        linear-gradient(180deg, #fdf8f2 0%, #f6f0e8 45%, #efe5d8 100%);
+      line-height: 1.6;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page-shell {
+      width: min(100% - 32px, var(--container-width));
+      margin: 0 auto;
+      padding: 32px 0 40px;
+    }
+
+    .glass-panel {
+      background: var(--surface-color);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 36px;
+      border-radius: var(--radius-xl);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto -60px -80px auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(184, 92, 56, 0.28), transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 28px;
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-intro {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(184, 92, 56, 0.12);
+      color: var(--accent-dark);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 4.6rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      max-width: 12ch;
+    }
+
+    .hero-copy {
+      max-width: 62ch;
+      color: var(--muted-color);
+      font-size: 1.05rem;
+    }
+
+    .hero-contact {
+      display: grid;
+      gap: 14px;
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-card);
+    }
+
+    .contact-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+
+    .contact-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-item {
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: #fffaf4;
+      border: 1px solid rgba(184, 92, 56, 0.12);
+      transition: transform var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .contact-item:hover,
+    .contact-item:focus-within {
+      transform: translateY(-2px);
+      border-color: rgba(184, 92, 56, 0.35);
+    }
+
+    .contact-label {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted-color);
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .section {
+      margin-top: 32px;
+      padding: 34px;
+      border-radius: var(--radius-xl);
+    }
+
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: end;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .section-note {
+      max-width: 58ch;
+      color: var(--muted-color);
+    }
+
+    .about-text {
+      max-width: 70ch;
+      color: var(--muted-color);
+      font-size: 1.02rem;
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .about-visual {
+      display: flex;
+      position: relative;
+      top: -22px;
+    }
+
+    .about-image-frame {
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(184, 92, 56, 0.14);
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: var(--shadow-card);
+    }
+
+    .about-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 8%;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 18px;
+    }
+
+    .tech-card {
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 12px;
+      min-height: 138px;
+      padding: 22px 16px;
+      border-radius: var(--radius-lg);
+      background: var(--surface-strong);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-card);
+      text-align: center;
+      transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        border-color var(--transition-fast);
+    }
+
+    .tech-card:hover,
+    .tech-card:focus-within {
+      transform: translateY(-4px);
+      border-color: rgba(184, 92, 56, 0.35);
+      box-shadow: 0 18px 34px rgba(31, 27, 22, 0.12);
+    }
+
+    .tech-logo {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+    }
+
+    .tech-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+    }
+
+    .project-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: var(--radius-lg);
+      background: var(--surface-strong);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-card);
+      transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        border-color var(--transition-fast);
+    }
+
+    .project-card:hover,
+    .project-card:focus-within {
+      transform: translateY(-6px);
+      border-color: rgba(184, 92, 56, 0.35);
+      box-shadow: 0 20px 36px rgba(31, 27, 22, 0.14);
+    }
+
+    .project-media {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: linear-gradient(135deg, #e8d6c4 0%, #f7ede2 100%);
+    }
+
+    .project-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 280ms ease;
+    }
+
+    .project-card:hover .project-media img,
+    .project-card:focus-within .project-media img {
+      transform: scale(1.04);
+    }
+
+    .project-body {
+      display: grid;
+      gap: 10px;
+      padding: 20px;
+      flex: 1;
+    }
+
+    .project-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      min-width: 160px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(184, 92, 56, 0.12);
+      color: var(--accent-dark);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .project-title {
+      font-size: 1.2rem;
+      line-height: 1.2;
+    }
+
+    .project-description {
+      color: var(--muted-color);
+      font-size: 0.96rem;
+    }
+
+    .project-actions {
+      margin-top: auto;
+      padding-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .project-action-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(184, 92, 56, 0.24);
+      background: #fffaf4;
+      color: var(--accent-dark);
+      font-weight: 700;
+      font-size: 0.92rem;
+      transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast);
+    }
+
+    .project-action-link:hover,
+    .project-action-link:focus-visible {
+      background: rgba(184, 92, 56, 0.12);
+      border-color: rgba(184, 92, 56, 0.45);
+      outline: none;
+    }
+
+    .footer {
+      margin-top: 32px;
+      padding: 26px 30px;
+      border-radius: var(--radius-xl);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      color: var(--muted-color);
+    }
+
+    .footer strong {
+      color: var(--text-color);
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-links a:hover,
+    .footer-links a:focus-visible {
+      color: var(--accent-dark);
+      outline: none;
+    }
+
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 500ms ease, transform 500ms ease;
+    }
+
+    .reveal-on-scroll.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .about-visual {
+        display: none;
+      }
+
+      .hero,
+      .section,
+      .footer {
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-shell {
+        width: min(100% - 20px, var(--container-width));
+        padding: 20px 0 28px;
+      }
+
+      .hero,
+      .section,
+      .footer {
+        padding: 20px;
+        border-radius: 22px;
+      }
+
+      .section-header {
+        margin-bottom: 18px;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tech-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .contact-item,
+      .project-body {
+        padding: 16px;
+      }
+
+      .tech-card {
+        min-height: 124px;
+        padding: 18px 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero glass-panel reveal-on-scroll" id="topo">
+      <div class="hero-grid">
+        <div class="hero-intro">
+          <span class="eyebrow">Portfolio Profissional</span>
+
+          <!-- EDITE AQUI: Substitua pelo seu nome -->
+          <h1>Lucas Victor Elpidio</h1>
+
+          <!-- EDITE AQUI: Resumo curto de destaque do cabecalho -->
+          <p class="hero-copy">
+            Esta página reúne meus projetos como Analista de Dados, desenvolvidos com foco em exploração, análise e geração de insights a partir de dados.<br><br> 
+            Aqui apresento estudos práticos que demonstram minhas habilidades em tratamento, visualização e interpretação de informações para apoiar a tomada de decisão.
+          </p>
+        </div>
+
+        <div class="hero-contact" aria-label="Informacoes de contato">
+          <p class="contact-title">Contato</p>
+
+          <ul class="contact-list">
+            <li class="contact-item">
+              <span class="contact-label">E-mail</span>
+              <!-- EDITE AQUI: Substitua pelo seu e-mail -->
+              <a href="mailto:lucasvex16@gmail.com">lucasvex16@gmail.com</a>
+            </li>
+
+            <li class="contact-item">
+              <span class="contact-label">Celular</span>
+              <!-- EDITE AQUI: Substitua pelo seu telefone -->
+              <a href="tel:+5542999012692">+55 (42) 99901-2692</a>
+            </li>
+
+            <li class="contact-item">
+              <span class="contact-label">LinkedIn</span>
+              <!-- EDITE AQUI: Substitua pelo link correto do LinkedIn -->
+              <a href="https://www.linkedin.com/in/lucas-victor-elpidio/" target="_blank" rel="noopener noreferrer">
+                linkedin.com/in/lucas-victor-elpidio
+              </a>
+            </li>
+
+            <li class="contact-item">
+              <span class="contact-label">GitHub</span>
+              <!-- EDITE AQUI: Substitua pelo link correto do GitHub -->
+              <a href="https://github.com/lucaselpidio" target="_blank" rel="noopener noreferrer">
+                github.com/lucaselpidio
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="section glass-panel reveal-on-scroll" id="sobre">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Sobre Mim</p>
+            <h2 class="section-title">Quem sou e o que eu faço</h2>
+          </div>
+        </div>
+
+        <!--
+          EDITE AQUI:
+          Este texto foi mantido em aproximadamente 6 linhas, como solicitado.
+          Pode trocar livremente sem afetar o layout.
+        -->
+        <div class="about-layout">
+          <p class="about-text">
+            Analista de Dados formado pela EBAC – Escola Britânica de Artes Criativas e Tecnologia, graduado em Análise e Desenvolvimento de Sistemas pela UNINTER (2021). 
+              <br><br>
+              Faço elaboração de análises exploratórias de dados para identificar padrões, tendências, oportunidades, transformando dados em informações estratégicas. 
+              Construção de dashboards e relatórios com ferramentas de BI.<br><br>
+              Desenvolvimento de projetos, realizando a construção de bases de dados particionadas e compactadas a fim de otimizar custos de consultas SQL e
+              computação em nuvem escalável com AWS.
+          </p>
+
+          <!--
+            EDITE AQUI:
+            Esta imagem aparece apenas em telas maiores para aproveitar o espaço do desktop.
+            No mobile ela fica oculta automaticamente via CSS responsivo.
+          -->
+          <div class="about-visual" aria-hidden="true">
+            <div class="about-image-frame">
+              <img
+                class="about-image"
+                src="https://github.com/lucaselpidio/media-rep/blob/main/dataanalyst2.jpeg?raw=true"
+                alt="Ilustração relacionada a análise de dados"
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section glass-panel reveal-on-scroll" id="tecnologias">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Tecnologias</p>
+            <h2 class="section-title">Ferramentas e conhecimentos</h2>
+          </div>
+        </div>
+
+        <!--
+          EDITE AQUI:
+          Se quiser, substitua os links externos das logos por imagens locais depois.
+          Tambem e possivel duplicar qualquer bloco <article class="tech-card"> sem quebrar o layout.
+        -->
+        <div class="tech-grid">
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg"
+              alt="Logo do Python"
+            >
+            <h3 class="tech-name">Python</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg"
+              alt="Logo do Pandas"
+            >
+            <h3 class="tech-name">Pandas</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://seaborn.pydata.org/_images/logo-mark-lightbg.svg"
+              alt="Logo do Seaborn"
+            >
+            <h3 class="tech-name">Seaborn</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg"
+              alt="Logo do NumPy"
+            >
+            <h3 class="tech-name">NumPy</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg"
+              alt="Logo da AWS"
+            >
+            <h3 class="tech-name">AWS</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://images.seeklogo.com/logo-png/61/1/looker-studio-logo-png_seeklogo-617989.png"
+              alt="Logo do Looker Studio"
+            >
+            <h3 class="tech-name">Looker Studio</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"
+              alt="Logo de SQL"
+            >
+            <h3 class="tech-name">SQL</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg"
+              alt="Logo do Git"
+            >
+            <h3 class="tech-name">Git</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+              alt="Logo do GitHub"
+            >
+            <h3 class="tech-name">GitHub</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg"
+              alt="Logo do HTML5"
+            >
+            <h3 class="tech-name">HTML5</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg"
+              alt="Logo do CSS3"
+            >
+            <h3 class="tech-name">CSS3</h3>
+          </article>
+
+          <article class="tech-card">
+            <img
+              class="tech-logo"
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+              alt="Logo do JavaScript"
+            >
+            <h3 class="tech-name">JavaScript</h3>
+          </article>
+        </div>
+      </section>
+
+      <section class="section glass-panel reveal-on-scroll" id="projetos">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Projetos</p>
+            <h2 class="section-title">Projetos desenvolvidos por mim</h2>
+          </div>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid">
+          <!--
+            MODELO REUTILIZAVEL DE CARD:
+            Copie um bloco <article class="project-card">...</article> inteiro
+            e altere imagem, titulo, categoria, descricao e os dois links de acesso.
+          -->
+
+          <article class="project-card">
+            <div class="project-media">
+              <!-- EDITE AQUI: Troque a imagem placeholder pela imagem real do projeto -->
+              <img
+                src="https://raw.githubusercontent.com/lucaselpidio/media-rep/refs/heads/main/olist_project/fat_mensal.png"
+                alt="Imagem ilustrativa do projeto 1"
+              >
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Análise de Dados</span>
+              <h3 class="project-title">E-commerce Olist</h3>
+              <p class="project-description">
+                Este projeto analisou dados do e-commerce Olist com o objetivo de compreender padrões de vendas, 
+                comportamento de preços, evolução temporal dos pedidos e o impacto da logística na experiência do cliente.
+              </p>
+              <div class="project-actions">
+                <a class="project-action-link" href="https://github.com/lucaselpidio/ecommerce-olist-eda" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no GitHub
+                </a>
+                <a class="project-action-link" href="https://www.kaggle.com/code/lucaselpidio/analise-olist" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no Kaggle
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img
+                src="https://raw.githubusercontent.com/lucaselpidio/media-rep/refs/heads/main/disneyplusimg.png"
+                alt="Imagem ilustrativa do projeto 2"
+              >
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Análise de Dados</span>
+              <h3 class="project-title">Catálogo Disney+</h3>
+              <p class="project-description">
+                Esse projeto tem como objetivo aplicar conceitos fundamentais de análise exploratória em um dataset público contendo os títulos disponíveis na plataforma Disney+.
+              </p>
+              <div class="project-actions">
+                <a class="project-action-link" href="https://github.com/lucaselpidio/disneyplus_EDA" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no GitHub
+                </a>
+                <a class="project-action-link" href="https://www.kaggle.com/code/lucaselpidio/disneyplus-eda" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no Kaggle
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img
+                src="https://github.com/lucaselpidio/media-rep/blob/main/qtt-wage-graphic.png?raw=true"
+                alt="Imagem ilustrativa do projeto 3"
+              >
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Análise de Dados</span>
+              <h3 class="project-title">Análise de Crédito</h3>
+              <p class="project-description">
+                Projeto com objetivo de compreender padrões de gasto e identificar o perfil do público-alvo, revelando tendências comportamentais e
+                  insights que possam apoiar decisões estratégicas relacionadas a oferta de produtos e serviços financeiros.
+              </p>
+              <div class="project-actions">
+                <a class="project-action-link" href="https://github.com/lucaselpidio/credit-eda-sql" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no GitHub
+                </a>
+                <a class="project-action-link" href="https://www.kaggle.com/code/lucaselpidio/credit-eda" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no Kaggle
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img
+                src="https://raw.githubusercontent.com/lucaselpidio/media-rep/refs/heads/main/alugueisimg.png"
+                alt="Imagem do projeto análise e previsão de aluguéis"
+              >
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Análise de Dados</span>
+              <h3 class="project-title">Análise e Previsão de Aluguéis</h3>
+              <p class="project-description">
+                O projeto busca entender os fatores que influenciam o número de aluguéis de bicicletas em Londres, 
+                utilizando dados públicos de 2015 e 2016. Além da análise descritiva, é construído um modelo preditivo para estimar 
+                a demanda horária de bicicletas com base em variáveis climáticas e temporais.
+              </p>
+              <div class="project-actions">
+                <a class="project-action-link" href="https://github.com/lucaselpidio/bike_sharing_london" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no GitHub
+                </a>
+                <a class="project-action-link" href="https://www.kaggle.com/code/lucaselpidio/an-lise-e-predi-o-de-alugu-is-de-bicicletas" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no Kaggle
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img
+                src="https://github.com/lucaselpidio/pipeline-dados-telegram/blob/main/arquitetura_mod42.png?raw=true"
+                alt="Imagem ilustrativa do projeto 5"
+              >
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Análise de Dados</span>
+              <h3 class="project-title">Pipeline de Dados Telegram</h3>
+              <p class="project-description">
+                Neste projeto, desenvolvemos um pipeline de dados completo para coletar, 
+                transformar e analisar mensagens de um bot do Telegram, com foco em compreender padrões de uso e comportamento em grupos de conversas.
+              </p>
+              <div class="project-actions">
+                <a class="project-action-link" href="https://github.com/lucaselpidio/pipeline-dados-telegram" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no GitHub
+                </a>
+                <a class="project-action-link" href="https://www.kaggle.com/code/lucaselpidio/pipeline-dados-telegram-projeto-final-ebac" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no Kaggle
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-media">
+              <img
+                src="https://raw.githubusercontent.com/lucaselpidio/media-rep/refs/heads/main/covidimg.png"
+                alt="Imagem ilustrativa do projeto Covid 19 EDA"
+              >
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Análise de Dados</span>
+              <h3 class="project-title">Covid-19 EDA + Dashboard</h3>
+              <p class="project-description">
+                O projeto busca compreender padrões de evolução da pandemia, comparar diferentes regiões e
+                 avaliar os efeitos de políticas públicas adotadas ao longo do tempo.
+              </p>
+              <div class="project-actions">
+                <a class="project-action-link" href="https://github.com/lucaselpidio/covid-19-eda" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no GitHub
+                </a>
+                <a class="project-action-link" href="https://www.kaggle.com/code/lucaselpidio/covid19-eda-pt-br#COVID-19-EDA" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no Kaggle
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!--<article class="project-card">
+            <div class="project-media">
+              <img
+                src="https://via.placeholder.com/800x500/EEE1D3/5A4635?text=Projeto+06"
+                alt="Imagem ilustrativa do projeto 6"
+              >
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Categoria</span>
+              <h3 class="project-title">Projeto Placeholder 06</h3>
+              <p class="project-description">
+                Substitua os placeholders com seus projetos reais quando quiser. A estrutura ja
+                esta preparada para facilitar manutencao futura.
+              </p>
+              <div class="project-actions">
+                <a class="project-action-link" href="https://github.com/seu-usuario/projeto-6" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no GitHub
+                </a>
+                <a class="project-action-link" href="https://www.kaggle.com/" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no Kaggle
+                </a>
+              </div>
+            </div>
+          </article>-->
+
+          <!--<article class="project-card">
+            <div class="project-media">
+              <img
+                src="https://via.placeholder.com/800x500/EEE1D3/5A4635?text=Projeto+06"
+                alt="Imagem ilustrativa do projeto 6"
+              >
+            </div>
+            <div class="project-body">
+              <span class="project-tag">Categoria</span>
+              <h3 class="project-title">Projeto Placeholder 06</h3>
+              <p class="project-description">
+                Substitua os placeholders com seus projetos reais quando quiser. A estrutura ja
+                esta preparada para facilitar manutencao futura.
+              </p>
+              <div class="project-actions">
+                <a class="project-action-link" href="https://github.com/seu-usuario/projeto-6" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no GitHub
+                </a>
+                <a class="project-action-link" href="https://www.kaggle.com/" target="_blank" rel="noopener noreferrer">
+                  Acessar projeto no Kaggle
+                </a>
+              </div>
+            </div>
+          </article>-->
+
+
+        </div>
+      </section>
+    </main>
+    
+
+
+    <footer class="footer glass-panel reveal-on-scroll">
+      <p>
+        <strong>Lucas Victor Elpidio</strong> • Portfolio pessoal com layout responsivo em arquivo unico.
+      </p>
+
+      <div class="footer-links">
+        <a href="#topo">Voltar ao topo</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#tecnologias">Tecnologias</a>
+        <a href="#projetos">Projetos</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    /*
+      JavaScript leve apenas para dar um acabamento visual com animacao
+      de entrada ao rolar a pagina. Pode remover sem afetar a estrutura.
+    */
+    const revealElements = document.querySelectorAll(".reveal-on-scroll");
+
+    const revealOnScroll = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealOnScroll.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15
+    });
+
+    revealElements.forEach((element) => revealOnScroll.observe(element));
+  </script>
+</body>
+</html>
