@@ -113,6 +113,8 @@ svg.cheio { fill: currentColor; stroke: none; }
   background: transparent; color: var(--texto); cursor: pointer;
 }
 .botao-icone:hover { border-color: var(--linha-forte); background: var(--superficie); }
+.idioma { width: auto; min-width: 40px; padding: 0 10px; color: var(--texto); font-size: 13px; font-weight: 700; letter-spacing: .04em; }
+.idioma:hover { color: var(--texto); }
 
 /* ------------------------------------------------------------------ topo */
 .topo {
