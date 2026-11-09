@@ -27,7 +27,7 @@ css/estilo.css      estilos e temas
 js/site.js          tema, menu do celular, seção ativa e animação de entrada
 img/projetos/       capturas das demonstrações (tema escuro)
 img/og.png          prévia do link ao compartilhar (LinkedIn, WhatsApp); og-en.png para a versão em inglês
-curriculo/          currículo em PDF
+curriculo/          currículo em PDF (português e inglês)
 ```
 
 Para ver localmente, abra `index.html` no navegador.
